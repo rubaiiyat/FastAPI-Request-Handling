@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from enum import Enum
 app=FastAPI()
 
@@ -17,3 +17,15 @@ async def get_users(user_id:int):
     return user_id
 
 
+
+#query parameter 
+@app.get('/items/')
+async def get_items(product:str, price:int):
+    return {
+        'product':product,
+        'price':price,
+    }
+
+@app.get('/products')
+async def get_products(request:Request):
+    return dict(request.query_params)
