@@ -2,25 +2,18 @@ from fastapi import FastAPI
 from enum import Enum
 app=FastAPI()
 
-@app.get('/')
-async def home():
-    return 'is running'
+class chooseOption(str,Enum):
+    USA='USA',
+    UK='UK',
+    BD='BD'
 
-class Category(str, Enum):
-    electronics='electronics',
-    clothes='clothes',
-    instruments='instruments'
-
-
-
-@app.get('/user/user_id')
-async def get_user(user_id:int):
-    return {'user_id':user_id}
+@app.get('/country/{country_name}')
+async def get_country(country_name:chooseOption):
+    return country_name
 
 
+@app.get('/user/{user_id}')
+async def get_users(user_id:int):
+    return user_id
 
-@app.get('/products/category')
-async def products(category:Category):
-    return {
-        'Category':category
-    }
+
