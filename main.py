@@ -1,5 +1,7 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,Form,UploadFile,File
 from pydantic import BaseModel
+import os
+import shutil
 from enum import Enum
 app=FastAPI()
 
@@ -54,4 +56,28 @@ async def get_headers(request:Request):
         'token':token,
         'user_agent':user_agent,
         'content_type':content_type
+    }
+
+
+# Multipart Form Data
+@app.post('/login')
+async def login(email:str = Form(...),password:str=Form(...)):
+    return {
+        'email':email,
+        'password':password
+    }
+
+UPLOAD_DIR='uploads'
+os.makedirs(UPLOAD_DIR,exist_ok=True)
+
+@app.post('/upload')
+async def upload(file:UploadFile=File(...)):
+    file_path=f'{UPLOAD_DIR}/{file.filename}'
+    with open(file_path,'wb') as f:
+        shutil.copyfileobj(file.file,f)
+
+    return {
+        "filename":file.filename,
+        "content_type":file.content_type,
+        "message":'File Upload Successfully'
     }
