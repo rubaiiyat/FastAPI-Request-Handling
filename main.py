@@ -1,4 +1,5 @@
 from fastapi import FastAPI,Request
+from pydantic import BaseModel
 from enum import Enum
 app=FastAPI()
 
@@ -29,3 +30,13 @@ async def get_items(product:str, price:int):
 @app.get('/products')
 async def get_products(request:Request):
     return dict(request.query_params)
+
+
+#Pydantic Base Model
+class User(BaseModel):
+    name:str
+    email:str
+
+@app.post('/user')
+async def create_user(user:User):
+    return user
