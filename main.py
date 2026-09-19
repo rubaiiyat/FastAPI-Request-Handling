@@ -40,3 +40,18 @@ class User(BaseModel):
 @app.post('/user')
 async def create_user(user:User):
     return user
+
+
+#Headers Authorization
+@app.get('/headers')
+async def get_headers(request:Request):
+    headers=dict(request.headers)
+    token=headers.get('authorization')
+    user_agent=headers.get('user-agent')
+    content_type=headers.get('content-type')
+
+    return {
+        'token':token,
+        'user_agent':user_agent,
+        'content_type':content_type
+    }
